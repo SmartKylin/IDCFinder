@@ -14,15 +14,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 
-import HomePage from 'containers/HomePage/Loadable';
-import SearchPage from 'containers/SearchPage/Loadable';
-import NewsPage from 'containers/NewsPage/Loadable';
-import ConselingPage from 'containers/ConselingPage/Loadable';
-import EvaluatePage from 'containers/EvaluatePage/Loadable';
-import LoginPage from 'containers/LoginPage/Loadable';
-import RoomDetailPage from 'containers/RoomDetailPage/Loadable';
-import CloudMap from 'containers/CloudMap/Loadable';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import { routerData } from 'common/router';
+// import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 import { makeSelectPathname } from './selectors';
@@ -37,9 +30,12 @@ const AppWrapper = styled.div`
 `;
 
 const mapStateToProps = createStructuredSelector({
-  pathname: makeSelectPathname()
+  pathname: makeSelectPathname(),
 });
-@connect(mapStateToProps, null)
+@connect(
+  mapStateToProps,
+  null,
+)
 export default class App extends React.Component {
   static propTypes = {
     pathname: PropTypes.string,
@@ -49,21 +45,14 @@ export default class App extends React.Component {
     return (
       <AppWrapper>
         <Helmet titleTemplate="%s - 找机房" defaultTitle="找机房">
-          <meta name="description" content="A React.js Boilerplate application" />
+          <meta
+            name="description"
+            content="A React.js Boilerplate application"
+          />
         </Helmet>
         <Header curPath={pathname} />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          {/* <Route path="/features" component={FeaturePage} /> */}
-          <Route path="/search" component={SearchPage} />
-          <Route path="/news" component={NewsPage} />
-          <Route path="/conseling" component={ConselingPage} />
-          <Route path="/evaluate" component={EvaluatePage} />
-          <Route path="/detail" component={RoomDetailPage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/map" component={CloudMap} />
-          <Route path="/detail" component={RoomDetailPage} />
-          <Route path="" component={NotFoundPage} />
+          {routerData.map(router => <Route {...router} key={ router.path } />)}
         </Switch>
         <Footer />
       </AppWrapper>
